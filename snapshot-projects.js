@@ -15,13 +15,13 @@ async function run() {
     });
     
     const supabaseClient = createClient(
-        process.env.POTLOCK_PROJECT_SUPABASE_URL,
-        process.env.POTLOCK_PROJECT_SUPABASE_ANON_KEY
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
     
-    const vectorStoreProject = new SupabaseVectorStore(embeddings, {
+    const vectorStore = new SupabaseVectorStore(embeddings, {
         client: supabaseClient,
-        tableName: "documents",
+        tableName: "projects",
         queryName: "match_documents",
     });
     
@@ -83,6 +83,6 @@ async function run() {
         }
     }
     
-    vectorStoreProject.addDocuments(documentsProje
+    vectorStore.addDocuments(documentsProject)
 }
 run()
