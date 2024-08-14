@@ -6,29 +6,25 @@ import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { Document } from "@langchain/core/documents";
 import { } from 'dotenv/config'
 
-console.log(process.env.OPENAI_API_KEY)
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-small",
-    apiKey: OPENAI_API_KEY
-});
 
-const supabaseClient = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_PRIVATE_KEY
-);
-
-const vectorStoreProject = new SupabaseVectorStore(embeddings, {
-    client: supabaseClient,
-    tableName: "projects",
-    queryName: "match_documents",
-});
-const vectorStorePots = new SupabaseVectorStore(embeddings, {
-    client: supabaseClient,
-    tableName: "pots",
-    queryName: "match_documents",
-});
 async function run() {
+    const embeddings = new OpenAIEmbeddings({
+        model: "text-embedding-3-small",
+        apiKey: OPENAI_API_KEY
+    });
+    
+    const supabaseClient = createClient(
+        process.env.POTLOCK_PROJECT_SUPABASE_URL,
+        process.env.POTLOCK_PROJECT_SUPABASE_ANON_KEY
+    );
+    
+    const vectorStoreProject = new SupabaseVectorStore(embeddings, {
+        client: supabaseClient,
+        tableName: "documents",
+        queryName: "match_documents",
+    });
+    
     const provider = new providers.JsonRpcProvider({ url: "https://rpc.mainnet.near.org" });
     const accountList = await provider.query({
         request_type: "call_function",
@@ -87,6 +83,6 @@ async function run() {
         }
     }
     
-    vectorStoreProject.addDocuments(documentsProject)
+    vectorStoreProject.addDocuments(documentsProje
 }
 run()
